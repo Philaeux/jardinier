@@ -1,0 +1,15 @@
+docker/Dockerfile*
+docker/docker.env
+docker/docker-compose*
+templates-backend/docs
+templates-backend/src/template/alembic/README
+templates-backend/src/tests
+templates-backend/src/settings.example.ini
+templates-backend/src/sqlite.db
+templates-frontend/node_modules
+templates-frontend/dist
+.dockerignore
+.git
+.github
+.gitignore
+LICENSE

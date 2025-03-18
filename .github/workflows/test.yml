@@ -1,0 +1,46 @@
+name: Tests
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+    - uses: actions/setup-node@v4
+      with:
+        node-version: "latest"
+    - uses: actions/setup-python@v5
+      with:
+        python-version: '3.12' 
+    
+    - name: Install node dependencies
+      run: |
+        cd templates-frontend
+        npm install
+
+    - name: Install python dependencies
+      run: |
+        cd templates-backend
+        python -m pip install --upgrade pip
+        pip install poetry
+        poetry install --with tests
+
+    - name: Run tests
+      run: |
+        cd templates-backend/src 
+        poetry run pytest
+
+    - name: Run node tests
+      run: |
+        cd templates-frontend
+        npm run test:ci

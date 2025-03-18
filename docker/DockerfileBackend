@@ -1,0 +1,15 @@
+FROM python:3.12
+
+RUN pip install poetry
+RUN poetry config virtualenvs.create false
+
+WORKDIR templates-backend/
+COPY ../templates-backend/pyproject.toml ../templates-backend/poetry.lock ./
+
+RUN poetry install --no-root
+
+COPY ../templates-backend/src /templates-backend/src
+EXPOSE 5000
+
+WORKDIR ./src
+CMD ["poetry", "run", "python", "main.py"]
