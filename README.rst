@@ -1,7 +1,7 @@
 Fullstack Website Template - Angular Frontend, Python FastAPI Backend
 =======================================================================
 
-To use this template, rename all mentions of "templates" in the filenames and file content with the codename of your project.
+To use this template, rename all mentions of "jardinier" in the filenames and file content with the codename of your project.
 
 Backend
 --------
@@ -34,13 +34,14 @@ Setup
 You first need to create 2 configuration files:
 
 - Create `./docker/docker.env` file with as structure similar to `./docker/docker.example.env`
-- Create `./templates-backend/src/settings.ini` file with a structure similar to `./templates-backend/src/settings.example.ini`
+- Create `./jardinier-backend/src/settings.ini` file with a structure similar to `./jardinier-backend/src/settings.example.ini`
 
 Production
 ------------
 
 If everything is properly setup (configuration files), its only a git pull and restart::
 
+    rsync -avz --stats --delete ~/dev/jardinier/ philaeux@192.168.0.35:~/jardinier
     cd docker
     git pull
     docker compose --env-file docker.env build
@@ -56,12 +57,12 @@ If you wish to use a postgresql database similar to production in dev, use the .
     docker compose -f docker-compose.dev.yaml --env-file docker.env up
     # Optional, make a backup of production database and use it as a snapshot for dev purposes
     # On server:
-    sudo rsync -av --no-perms --delete --chown=$(whoami) ../templates_postgres_data/ ~/templates_postgres_save
-    sudo chown -R $(whoami):$(whoami) ../templates_postgres_save
+    sudo rsync -av --no-perms --delete --chown=$(whoami) ../jardinier_postgres_data/ ~/jardinier_postgres_save
+    sudo chown -R $(whoami):$(whoami) ../jardinier_postgres_save
     # On machine:
-    sudo rsync -avz --stats --delete $(whoami)@<server>:~/templates_postgres_save/ ../templates_postgres_data
+    sudo rsync -avz --stats --delete $(whoami)@<server>:~/jardinier_postgres_save/ ../jardinier_postgres_data
     # On server:
-    sudo rm -rf ~/templates_postgres_save
+    sudo rm -rf ~/jardinier_postgres_save
 
 To run the backend, using poetry::
 
@@ -69,7 +70,7 @@ To run the backend, using poetry::
     python -m pip install pipx
     python -m pipx install poetry
     # Install dependencies
-    cd templates-backend
+    cd jardinier-backend
     poetry install --with docs,tests
     # Run tests
     cd src
@@ -103,7 +104,7 @@ Before using the frontend, make sure you have `nvm` installed. To run the fronte
     # Install angular global library:
     npm install -g @angular/cli
     # Install frontend libraries
-    cd templates-frontend
+    cd jardinier-frontend
     npm install
     # Start the project:
     ng serve

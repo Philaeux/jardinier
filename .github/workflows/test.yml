@@ -25,22 +25,22 @@ jobs:
     
     - name: Install node dependencies
       run: |
-        cd templates-frontend
+        cd jardinier-frontend
         npm install
 
     - name: Install python dependencies
       run: |
-        cd templates-backend
+        cd jardinier-backend
         python -m pip install --upgrade pip
         pip install poetry
         poetry install --with tests
 
     - name: Run tests
       run: |
-        cd templates-backend/src 
+        cd jardinier-backend/src 
         poetry run pytest
 
     - name: Run node tests
       run: |
-        cd templates-frontend
+        cd jardinier-frontend
         npm run test:ci

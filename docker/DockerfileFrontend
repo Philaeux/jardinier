@@ -1,13 +1,13 @@
 ### STAGE 1: Build ###
 FROM node:latest AS build
-WORKDIR /templates-frontend
-COPY ../templates-frontend/package.json ../templates-frontend/package-lock.json ./
+WORKDIR /jardinier-frontend
+COPY ../jardinier-frontend/package.json ../jardinier-frontend/package-lock.json ./
 RUN npm install
-COPY ../templates-frontend .
+COPY ../jardinier-frontend .
 RUN npm run build
 
 
 ### STAGE 2: Run ###
 FROM nginx:latest
 COPY ./docker/nginx.conf /etc/nginx/conf.d/default.conf
-COPY --from=build ./templates-frontend/dist/templates-frontend/browser /usr/share/nginx/html
+COPY --from=build ./jardinier-frontend/dist/jardinier-frontend/browser /usr/share/nginx/html

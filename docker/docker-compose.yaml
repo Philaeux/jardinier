@@ -1,11 +1,11 @@
 services:
   backend:
-    image: templates-backend
+    image: jardinier-backend
     build:
       context: ..
       dockerfile: docker/DockerfileBackend
 
-    container_name: templates-backend
+    container_name: jardinier-backend
     restart: always
     ports:
       - "19998:5000"
@@ -16,17 +16,17 @@ services:
   db:
     image: postgres:latest
 
-    container_name: templates-backend-db
+    container_name: jardinier-backend-db
     restart: always
 
     environment:
-      POSTGRES_DB: templates
-      POSTGRES_USER: templates
+      POSTGRES_DB: jardinier
+      POSTGRES_USER: jardinier
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     volumes:
-      - ../../templates_postgres_data:/var/lib/postgresql/data
+      - ../../jardinier_postgres_data:/var/lib/postgresql/data
     healthcheck:
-      test: [ "CMD-SHELL", "pg_isready -U templates" ]
+      test: [ "CMD-SHELL", "pg_isready -U jardinier" ]
       interval: 5s
       timeout: 5s
       retries: 5
@@ -37,9 +37,9 @@ services:
       dockerfile: docker/DockerfileFrontend
     ulimits:
       nofile: 5000
-    image: templates-frontend
+    image: jardinier-frontend
 
-    container_name: templates-frontend
+    container_name: jardinier-frontend
     restart: always
 
     ports:

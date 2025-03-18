@@ -2,12 +2,12 @@ services:
   db:
     image: postgres:latest
 
-    container_name: templates-backend-db
+    container_name: jardinier-backend-db
     restart: always
 
     environment:
-      POSTGRES_DB: templates
-      POSTGRES_USER: templates
+      POSTGRES_DB: jardinier
+      POSTGRES_USER: jardinier
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     volumes:
-      - ../../templates_postgres_data:/var/lib/postgresql/data
+      - ../../jardinier_postgres_data:/var/lib/postgresql/data
