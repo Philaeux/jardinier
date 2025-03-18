@@ -1,25 +1,30 @@
 from contextlib import asynccontextmanager
 
+import adafruit_ahtx0
+import board
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.requests import Request
-
+from sqlalchemy.orm import Session
 from strawberry.fastapi import GraphQLRouter
 from strawberry_sqlalchemy_mapper import StrawberrySQLAlchemyLoader
 
-from jardinier.settings import Settings
 from jardinier.database.database import Database
 from jardinier.graphql.schema import schema
+from jardinier.settings import Settings
+from jardinier.utils.repeat_every import repeat_every
 
 
 def make_app(settings: Settings):
     @asynccontextmanager
     async def lifespan(app: FastAPI):
-        # Add startup functions here
+        await save_data()
         yield
         # Add shutdown functions here
 
     app = FastAPI(lifespan=lifespan)
+    i2c = board.I2C()
+    sensor = adafruit_ahtx0.AHTx0(i2c)
 
     # Database
     database = Database(uri=settings.database_uri, auto_migrate=True)
@@ -39,10 +44,10 @@ def make_app(settings: Settings):
 
     # GraphQL
     async def get_context():
-        """Contexte passed to all GraphQL functions. Give database access"""
+        """Context passed to all GraphQL functions. Give database access"""
         return {
             "settings": settings,
-            "session_factory": database.session_factory,
+            "session": Session(database.engine),
             "sqlalchemy_loader": StrawberrySQLAlchemyLoader(bind=database.session_factory()),
         }
 
@@ -61,5 +66,10 @@ def make_app(settings: Settings):
     @app.get('/hello')
     async def hello(request: Request):
         return {"message": "Hello World"}
+
+    @repeat_every(seconds=60)
+    async def save_data():
+        print("Temperature: %0.1f C" % sensor.temperature)
+        print("Humidity: %0.1f %%" % sensor.relative_humidity)
 
     return app
