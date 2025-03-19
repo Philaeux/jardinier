@@ -236,6 +236,33 @@ domdf-python-tools = ">=2.6.0"
 idna = ">=2.5"
 
 [[package]]
+name = "apscheduler"
+version = "3.11.0"
+description = "In-process task scheduler with Cron-like capabilities"
+optional = false
+python-versions = ">=3.8"
+files = [
+    {file = "APScheduler-3.11.0-py3-none-any.whl", hash = "sha256:fc134ca32e50f5eadcc4938e3a4545ab19131435e851abb40b34d63d5141c6da"},
+    {file = "apscheduler-3.11.0.tar.gz", hash = "sha256:4c622d250b0955a65d5d0eb91c33e6d43fd879834bf541e0a18661ae60460133"},
+]
+
+[package.dependencies]
+tzlocal = ">=3.0"
+
+[package.extras]
+doc = ["packaging", "sphinx", "sphinx-rtd-theme (>=1.3.0)"]
+etcd = ["etcd3", "protobuf (<=3.21.0)"]
+gevent = ["gevent"]
+mongodb = ["pymongo (>=3.0)"]
+redis = ["redis (>=3.0)"]
+rethinkdb = ["rethinkdb (>=2.4.0)"]
+sqlalchemy = ["sqlalchemy (>=1.4)"]
+test = ["APScheduler[etcd,mongodb,redis,rethinkdb,sqlalchemy,tornado,zookeeper]", "PySide6", "anyio (>=4.5.2)", "gevent", "pytest", "pytz", "twisted"]
+tornado = ["tornado (>=4.3)"]
+twisted = ["twisted"]
+zookeeper = ["kazoo"]
+
+[[package]]
 name = "autodocsumm"
 version = "0.2.12"
 description = "Extended sphinx autodoc including automatic autosummaries"
@@ -1879,20 +1906,6 @@ files = [
 ]
 
 [[package]]
-name = "sentinel"
-version = "1.0.0"
-description = "Create sentinel objects, akin to None, NotImplemented, Ellipsis"
-optional = false
-python-versions = ">=3.6,<4.0"
-files = [
-    {file = "sentinel-1.0.0-py3-none-any.whl", hash = "sha256:24f02a34cc9f0fcba5a666a23b6c7f56aff332fc624632ee442e7237751a9f60"},
-    {file = "sentinel-1.0.0.tar.gz", hash = "sha256:190928f9951af6e94a1f84eefcaed791c28097dd152b88e988906be300451fd2"},
-]
-
-[package.extras]
-varname = ["varname (>=0.1)"]
-
-[[package]]
 name = "shellingham"
 version = "1.5.4"
 description = "Tool to Detect Surrounding Shell"
@@ -2282,7 +2295,7 @@ files = [
 ]
 
 [package.dependencies]
-greenlet = {version = "!=0.4.17", optional = true, markers = "platform_machine == \"aarch64\" or platform_machine == \"ppc64le\" or platform_machine == \"x86_64\" or platform_machine == \"amd64\" or platform_machine == \"AMD64\" or platform_machine == \"win32\" or platform_machine == \"WIN32\" or extra == \"asyncio\""}
+greenlet = {version = "!=0.4.17", markers = "platform_machine == \"aarch64\" or platform_machine == \"ppc64le\" or platform_machine == \"x86_64\" or platform_machine == \"amd64\" or platform_machine == \"AMD64\" or platform_machine == \"win32\" or platform_machine == \"WIN32\""}
 typing-extensions = ">=4.6.0"
 
 [package.extras]
@@ -2363,21 +2376,23 @@ sanic = ["sanic (>=20.12.2)"]
 starlite = ["starlite (>=1.48.0)"]
 
 [[package]]
-name = "strawberry-sqlalchemy-mapper"
-version = "0.3.1"
-description = "A library for autogenerating Strawberry GraphQL types from SQLAlchemy models."
+name = "strawchemy"
+version = "0.6.0"
+description = "Generate GraphQL API from SQLAlchemy models"
 optional = false
-python-versions = ">=3.8,<4.0"
+python-versions = ">=3.9"
 files = [
-    {file = "strawberry_sqlalchemy_mapper-0.3.1-py3-none-any.whl", hash = "sha256:f591792b03a7dcb0de92df5d74c13a747dd763d5d47331a96ddf08309847dcea"},
-    {file = "strawberry_sqlalchemy_mapper-0.3.1.tar.gz", hash = "sha256:d26e2d2793c18b6dbfd127e0ce1a3dcd6b75e4de152dcd0aae1bd45cd36a9a0e"},
+    {file = "strawchemy-0.6.0-py3-none-any.whl", hash = "sha256:5c8bbfc9b2668baca26ad1159a47d16dc72e60b6cd39ae17321aec2e5f1f1f38"},
+    {file = "strawchemy-0.6.0.tar.gz", hash = "sha256:ef1a3bf02f40802d3c6cef3a2f290f23a4fbcfb086a775061dc06f572121ccda"},
 ]
 
 [package.dependencies]
-greenlet = {version = ">=3.0.0rc1", markers = "python_version >= \"3.12\""}
-sentinel = ">=0.3,<1.1"
-sqlalchemy = {version = ">=1.4", extras = ["asyncio"]}
-strawberry-graphql = ">=0.95"
+pydantic = "*"
+sqlalchemy = ">=1.4"
+strawberry-graphql = "*"
+
+[package.extras]
+geo = ["geoalchemy2", "geojson-pydantic", "shapely"]
 
 [[package]]
 name = "sysv-ipc"
@@ -2445,6 +2460,23 @@ files = [
     {file = "tzdata-2024.1-py2.py3-none-any.whl", hash = "sha256:9068bc196136463f5245e51efda838afa15aaeca9903f49050dfa2679db4d252"},
     {file = "tzdata-2024.1.tar.gz", hash = "sha256:2674120f8d891909751c38abcdfd386ac0a5a1127954fbc332af6b5ceae07efd"},
 ]
+
+[[package]]
+name = "tzlocal"
+version = "5.3.1"
+description = "tzinfo object for the local timezone"
+optional = false
+python-versions = ">=3.9"
+files = [
+    {file = "tzlocal-5.3.1-py3-none-any.whl", hash = "sha256:eb1a66c3ef5847adf7a834f1be0800581b683b5608e74f86ecbcef8ab91bb85d"},
+    {file = "tzlocal-5.3.1.tar.gz", hash = "sha256:cceffc7edecefea1f595541dbd6e990cb1ea3d19bf01b2809f362a03dd7921fd"},
+]
+
+[package.dependencies]
+tzdata = {version = "*", markers = "platform_system == \"Windows\""}
+
+[package.extras]
+devenv = ["check-manifest", "pytest (>=4.3)", "pytest-cov", "pytest-mock (>=3.3)", "zest.releaser"]
 
 [[package]]
 name = "ujson"
@@ -2788,4 +2820,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.11"
-content-hash = "62dc79c3c989c8d2f79af4fc6eb9e17e7141dde17d65e04b675e58ff0de21b01"
+content-hash = "b568445cf9eb1e2748db23a50f25f10a37866a2796d8da8407394352e4ab6465"

@@ -1,8 +1,7 @@
 import strawberry
 
 from jardinier.graphql.mutations.a import mutation_error_example
-from jardinier.graphql.queries.a import query_success_example, query_error_example
-from jardinier.graphql.types.generated import strawberry_sqlalchemy_mapper
+from jardinier.graphql.queries.measure import query_success_example, query_error_example
 
 
 @strawberry.type
@@ -16,6 +15,4 @@ class Query:
     query_error_example = strawberry.field(resolver=query_error_example)
 
 
-strawberry_sqlalchemy_mapper.finalize()
-additional_types = list(strawberry_sqlalchemy_mapper.mapped_types.values())
-schema = strawberry.Schema(query=Query, mutation=Mutation, types=additional_types)
+schema = strawberry.Schema(query=Query, mutation=Mutation)

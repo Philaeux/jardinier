@@ -1,20 +1,20 @@
 from contextlib import asynccontextmanager
+from datetime import datetime, UTC
+from typing import Annotated
 
 import adafruit_ahtx0
 import board
-from typing import Annotated
-
+from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from fastapi import FastAPI, Depends
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.requests import Request
+from sqlalchemy import create_engine
 from sqlalchemy.orm import Session
 from strawberry.fastapi import GraphQLRouter
-from strawberry_sqlalchemy_mapper import StrawberrySQLAlchemyLoader
-from sqlalchemy import create_engine
 
+from jardinier.database.measure import Measure
 from jardinier.graphql.schema import schema
 from jardinier.settings import Settings
-from jardinier.utils.repeat_every import repeat_every
 from jardinier.utils.helpers import check_migration
 
 
@@ -22,6 +22,7 @@ def make_app(settings: Settings):
     # Database
     engine = create_engine(settings.database_uri)
     check_migration(settings.database_uri)
+    scheduler = AsyncIOScheduler(timezone=UTC)
 
     # Session dependency
     def get_session():
@@ -32,9 +33,9 @@ def make_app(settings: Settings):
     # App creation
     @asynccontextmanager
     async def lifespan(fast_app: FastAPI):
-        await save_data()
+        scheduler.start()
         yield
-        # Add shutdown functions here
+        scheduler.shutdown()
 
     app = FastAPI(lifespan=lifespan)
     app.engine = engine
@@ -59,7 +60,6 @@ def make_app(settings: Settings):
         return {
             "settings": settings,
             "session": session,
-            "sqlalchemy_loader": StrawberrySQLAlchemyLoader(bind=session),
         }
 
     graphql_app = GraphQLRouter(
@@ -77,10 +77,11 @@ def make_app(settings: Settings):
     async def hello(request: Request):
         return {"message": "Hello World"}
 
-    @repeat_every(wait_first=False, seconds=60)
+    @scheduler.scheduled_job('interval', seconds=10*60)
     async def save_data():
-        with Session(app.engine, expire_on_commit=False):
-            print("Temperature: %0.1f C" % sensor.temperature)
-            print("Humidity: %0.1f %%" % sensor.relative_humidity)
+        with Session(engine) as session:
+            measure = Measure(time=datetime.now(UTC), temperature=sensor.temperature, humidity=sensor.relative_humidity)
+            session.add(measure)
+            session.commit()
 
     return app

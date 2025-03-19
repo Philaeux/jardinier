@@ -1,12 +1,10 @@
-from strawberry_sqlalchemy_mapper import StrawberrySQLAlchemyMapper
-
-# ORM MAPPING
-strawberry_sqlalchemy_mapper = StrawberrySQLAlchemyMapper()
-
 # How to add an orm mapping to strawberry type
-from jardinier.database.a import A as AEntity
+from strawchemy import Strawchemy
 
+from jardinier.database.measure import Measure
 
-@strawberry_sqlalchemy_mapper.type(AEntity)
-class A:
+strawchemy = Strawchemy()
+
+@strawchemy.type(Measure, include="all")
+class MeasureGQL:
     pass

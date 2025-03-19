@@ -22,7 +22,7 @@ config.set_main_option("sqlalchemy.url", Settings().database_uri)
 # for 'autogenerate' support
 # from myapp import mymodel
 # target_metadata = mymodel.Base.metadata
-from jardinier.database.a import A
+from jardinier.database.measure import Measure
 target_metadata = Base.metadata
 
 # other values from the config, defined by the needs of env.py,
