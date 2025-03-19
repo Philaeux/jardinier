@@ -2,7 +2,7 @@
 name = "jardinier"
 version = "1.0.0"
 description = "Backend of the website Template."
-authors = ["Firstname 'Nickname' SURNAME <email>"]
+authors = ["Vincent 'Philaeux' LAMOTTE <vinc.lamotte@gmail.com>"]
 license = "CC BY-NC-SA 4.0"
 readme = "../README.rst"
 
