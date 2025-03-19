@@ -22,6 +22,8 @@ def make_app(settings: Settings):
     # Database
     engine = create_engine(settings.database_uri)
     check_migration(settings.database_uri)
+
+    # Periodic tasks scheduler
     scheduler = AsyncIOScheduler(timezone=UTC)
 
     # Session dependency
