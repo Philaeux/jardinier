@@ -2,6 +2,12 @@ import uuid
 from datetime import datetime, timedelta, UTC
 
 from jose import jwt, JWTError
+from strawberry import Info
+import os
+from pathlib import Path
+
+from alembic import command
+from alembic.config import Config
 
 
 def create_jwt_token(key: str, user_id: uuid.UUID):
@@ -27,3 +33,18 @@ def check_user(context):
         except JWTError:
             return None
     return None
+
+
+def unpack_utilities(info: Info):
+    """Unpack commonly used elements in queries/mutations"""
+    return (info.context["settings"],
+            info.context["session"])
+
+def check_migration(database_uri: str):
+    dir_uri = os.path.dirname(__file__)
+    alembic = Path(dir_uri) / ".." / ".." / "alembic.ini"
+    migrations = Path(dir_uri) / ".." / "alembic"
+    alembic_cfg = Config(alembic)
+    alembic_cfg.set_main_option('script_location', str(migrations))
+    alembic_cfg.set_main_option('sqlalchemy.url', database_uri)
+    command.upgrade(alembic_cfg, 'head')
