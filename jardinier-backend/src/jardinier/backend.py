@@ -1,4 +1,5 @@
 from contextlib import asynccontextmanager
+from dataclasses import dataclass
 from datetime import datetime, UTC
 from typing import Annotated
 
@@ -10,13 +11,18 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.requests import Request
 from sqlalchemy import create_engine
 from sqlalchemy.orm import Session
-from strawberry.fastapi import GraphQLRouter
+from strawberry.fastapi import GraphQLRouter, BaseContext
 
 from jardinier.database.measure import Measure
 from jardinier.graphql.schema import schema
 from jardinier.settings import Settings
 from jardinier.utils.helpers import check_migration
 
+
+@dataclass
+class AppContext(BaseContext):
+    settings: Settings
+    session: Session
 
 def make_app(settings: Settings):
     # Database
@@ -59,10 +65,7 @@ def make_app(settings: Settings):
     # GraphQL
     async def get_context(session: SessionDep):
         """Context passed to all GraphQL functions. Give database access"""
-        return {
-            "settings": settings,
-            "session": session,
-        }
+        return AppContext(settings=settings, session=session)
 
     graphql_app = GraphQLRouter(
         schema,

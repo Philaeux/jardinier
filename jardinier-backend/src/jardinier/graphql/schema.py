@@ -1,18 +1,11 @@
 import strawberry
 
-from jardinier.graphql.mutations.a import mutation_error_example
-from jardinier.graphql.queries.measure import query_success_example, query_error_example
-
-
-@strawberry.type
-class Mutation:
-    mutation_error_example = strawberry.mutation(resolver=mutation_error_example)
+from jardinier.graphql.types.generated import strawchemy, MeasureFilter, MeasureOrderBy, MeasureGQL
 
 
 @strawberry.type
 class Query:
-    query_success_example = strawberry.field(resolver=query_success_example)
-    query_error_example = strawberry.field(resolver=query_error_example)
+    measures: list[MeasureGQL] = strawchemy.field(filter_input=MeasureFilter, order_by=MeasureOrderBy, pagination=True)
 
 
-schema = strawberry.Schema(query=Query, mutation=Mutation)
+schema = strawberry.Schema(query=Query)

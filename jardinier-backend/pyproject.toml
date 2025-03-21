@@ -10,16 +10,16 @@ readme = "../README.rst"
 python = "^3.11"
 psycopg = {extras = ["binary"], version = "^3.1.12"}
 alembic = "^1.13.1"
-SQLAlchemy = "^2.0.25"
-fastapi = {extras = ["all"], version = "^0.111.0"}
-strawberry-graphql = "^0.229.0"
+SQLAlchemy = "^2.0.39"
+fastapi = {extras = ["all"], version = "^0.115.11"}
+strawberry-graphql = "^0.262.5"
 python-jose = {extras = ["pycryptodome"], version = "^3.3.0"}
 requests = "^2.31.0"
-uvicorn = "^0.29.0"
+uvicorn = "^0.34.0"
 adafruit-blinka = "^8.56.0"
 adafruit-circuitpython-ahtx0 = "^1.0.25"
 rpi-gpio = "^0.7.1"
-strawchemy = "^0.6.0"
+strawchemy = "^0.8.0"
 apscheduler = "^3.11.0"
 
 [tool.poetry.group.docs]
