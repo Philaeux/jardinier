@@ -1,0 +1,14 @@
+[Unit]
+Description=jardinier
+After=network.target
+
+[Service]
+Type=simple
+Restart=always
+User=philaeux
+Group=philaeux
+WorkingDirectory=/home/philaeux/jardinier/jardinier-backend/src
+ExecStart=/home/philaeux/.cache/pypoetry/virtualenvs/jardinier-payaMxnu-py3.12/bin/python main.py
+
+[Install]
+WantedBy=multi-user.target
