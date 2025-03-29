@@ -1,1 +1,10 @@
-Call to backend: {{callBackend}}
+<div class="charts">
+    <ngx-charts-line-chart [view]="view" [results]="mockDataTemp" [gradient]="false" [xAxis]="true" [yAxis]="true"
+        [legend]="false" [showXAxisLabel]="false" [showYAxisLabel]="true" [yAxisLabel]="'Température'"
+        [autoScale]="true">
+    </ngx-charts-line-chart>
+
+    <ngx-charts-line-chart [view]="view" [results]="mockDataHum" [gradient]="false" [xAxis]="true" [yAxis]="true"
+        [legend]="false" [showXAxisLabel]="false" [showYAxisLabel]="true" [yAxisLabel]="'Humidité'" [autoScale]="true">
+    </ngx-charts-line-chart>
+</div>
