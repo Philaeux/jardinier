@@ -9,7 +9,7 @@ import { setContext } from '@apollo/client/link/context';
 import { Apollo, APOLLO_OPTIONS } from 'apollo-angular';
 import { HttpLink } from 'apollo-angular/http';
 
-const uri = 'http://192.168.0.35:5000/graphql'
+const uri = '/api/graphql'
 
 export function apolloOptionsFactory(): ApolloClientOptions<any> {
   const httpLink = inject(HttpLink)

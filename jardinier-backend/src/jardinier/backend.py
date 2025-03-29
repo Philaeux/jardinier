@@ -7,10 +7,10 @@ import adafruit_ahtx0
 import board
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from fastapi import FastAPI, Depends
-from fastapi.middleware.cors import CORSMiddleware
 from fastapi.requests import Request
 from sqlalchemy import create_engine
 from sqlalchemy.orm import Session
+from starlette.middleware.cors import CORSMiddleware
 from strawberry.fastapi import GraphQLRouter, BaseContext
 
 from jardinier.database.measure import Measure
@@ -55,7 +55,8 @@ def make_app(settings: Settings):
     app.add_middleware(
         CORSMiddleware,
         allow_origins=[
-            settings.frontend_uri,
+            "https://jard.the-cluster.org",
+            "http://192.168.0.35",
             "http://localhost:4200"],
         allow_credentials=True,
         allow_methods=["*"],
@@ -72,13 +73,13 @@ def make_app(settings: Settings):
         graphql_ide="graphiql" if settings.debug else None,
         context_getter=get_context,
     )
-    app.include_router(graphql_app, prefix="/graphql")
+    app.include_router(graphql_app, prefix="/api/graphql")
 
     # Static files
     # app.mount("/aaa, StaticFiles(directory=any path), name="data")
 
     # Classic REST endpoints
-    @app.get('/hello')
+    @app.get('/api/hello')
     async def hello(request: Request):
         return {"message": "Hello World"}
 
