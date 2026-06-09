@@ -1,0 +1,17 @@
+FROM docker.io/library/python:3.12-alpine
+
+COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
+
+RUN apk add --no-cache gcc musl-dev
+WORKDIR /app
+
+COPY ./jardinier-backend/.python-version ./jardinier-backend/pyproject.toml ./jardinier-backend/uv.lock ./
+RUN uv sync --frozen --no-install-project --no-dev
+
+RUN apk del gcc musl-dev
+
+COPY ./jardinier-backend /app
+EXPOSE 5000
+
+WORKDIR /app/src
+CMD ["uv", "run", "main.py"]

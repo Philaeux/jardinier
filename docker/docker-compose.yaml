@@ -1,0 +1,36 @@
+services:
+  frontend:
+    build:
+      context: ..
+      dockerfile: docker/DockerfileFrontend
+    ulimits:
+      nofile: 5000
+    image: jardinier-frontend
+
+    container_name: jardinier-frontend
+    restart: always
+
+    ports:
+      - "8080:80"
+
+  backend:
+    build:
+      context: ..
+      dockerfile: docker/DockerfileBackend
+    image: templates-backend
+
+    container_name: jardinier-backend
+    restart: always
+    ports:
+      - "5000:5000"
+
+    security_opt:
+      - "unmask=ALL"
+
+    volumes:
+      - /proc/cpuinfo:/proc/cpuinfo:ro
+      - /sys:/sys:ro
+    devices:
+      - /dev/i2c-1:/dev/i2c-1
+      - /dev/gpiomem:/dev/gpiomem
+
