@@ -1,18 +1,16 @@
-from strawchemy import Strawchemy
-
+from strawchemy import Strawchemy, StrawchemyConfig
 from jardinier.database.measure import Measure
 
-strawchemy = Strawchemy()
-
+strawchemy = Strawchemy("sqlite")
 
 @strawchemy.type(Measure, include="all")
 class MeasureGQL:
     pass
 
-@strawchemy.filter_input(Measure, include="all")
+@strawchemy.filter(Measure, include="all")
 class MeasureFilter:
     pass
 
-@strawchemy.order_by_input(Measure, include="all")
+@strawchemy.order(Measure, include="all")
 class MeasureOrderBy:
     pass

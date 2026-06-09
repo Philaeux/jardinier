@@ -17,7 +17,7 @@ services:
     build:
       context: ..
       dockerfile: docker/DockerfileBackend
-    image: templates-backend
+    image: jardinier-backend
 
     container_name: jardinier-backend
     restart: always
@@ -27,9 +27,16 @@ services:
     security_opt:
       - "unmask=ALL"
 
+    privileged: true
+    annotations:
+      - run.oci.keep_original_groups=1
+    group_add:
+      - "988"
+
     volumes:
       - /proc/cpuinfo:/proc/cpuinfo:ro
       - /sys:/sys:ro
+      - ../jardinier-backend/src/sqlite.db:/app/src/sqlite.db:Z
     devices:
       - /dev/i2c-1:/dev/i2c-1
       - /dev/gpiomem:/dev/gpiomem
