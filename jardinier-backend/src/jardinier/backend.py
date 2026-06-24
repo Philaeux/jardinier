@@ -2,6 +2,7 @@ from contextlib import asynccontextmanager
 from dataclasses import dataclass
 from datetime import datetime, UTC
 from typing import Annotated
+import logging
 
 import adafruit_ahtx0
 import board
@@ -42,6 +43,7 @@ def make_app(settings: Settings):
     @asynccontextmanager
     async def lifespan(fast_app: FastAPI):
         scheduler.start()
+        await save_data()
         yield
         scheduler.shutdown()
 
@@ -83,11 +85,25 @@ def make_app(settings: Settings):
     async def hello(request: Request):
         return {"message": "Hello World"}
 
-    @scheduler.scheduled_job('interval', seconds=10*60)
+    @scheduler.scheduled_job('interval', seconds=5*60)
     async def save_data():
+        logging.info("Début de prise de données")
         with Session(engine) as session:
-            measure = Measure(time=datetime.now(UTC), temperature=sensor.temperature, humidity=sensor.relative_humidity)
-            session.add(measure)
-            session.commit()
+            max_retries = 5
+            for attempt in range(max_retries):
+                try:
+                    temp = sensor.temperature
+                    hum = sensor.relative_humidity
+                    measure = Measure(time=datetime.now(UTC), temperature=temp, humidity=hum)
+                    session.add(measure)
+                    session.commit()
+                    return
+                except OSError as e:
+                    logging.warning(f"Échec de lecture I2C tentative {attempt + 1}/{max_retries}")
+                    if attempt < max_retries - 1:
+                        await asyncio.sleep(1)
+                    else:
+                        logging.error("Impossible de lire le capteur")
+                        raise e
 
     return app

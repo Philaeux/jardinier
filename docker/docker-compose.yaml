@@ -1,5 +1,5 @@
 services:
-  frontend:
+  jardinier-frontend:
     build:
       context: ..
       dockerfile: docker/DockerfileFrontend
@@ -13,7 +13,7 @@ services:
     ports:
       - "8080:80"
 
-  backend:
+  jardinier-backend:
     build:
       context: ..
       dockerfile: docker/DockerfileBackend
