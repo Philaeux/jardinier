@@ -10,11 +10,42 @@
         [showXAxisLabel]="false" 
         [showYAxisLabel]="true" 
         [yAxisLabel]="'Température'"
-        [autoScale]="true">
+        [autoScale]="true"
+        [xAxisTickFormatting]="formatXAxis">
+
+        <ng-template #seriesTooltipTemplate let-model="model">
+        <div class="custom-tooltip" style="padding: 5px 10px; background: #333; color: #fff; border-radius: 4px;">
+            <p style="margin: 0; font-weight: bold;">{{ model[0].name | date: 'dd/MM/yyyy HH:mm:ss' }}</p>
+            
+            <span *ngFor="let item of model">
+                <span [style.color]="item.color">●</span> {{ item.series }}: <strong>{{ item.value | number:'1.2-2' }}°C</strong>
+            </span>
+        </div>
+    </ng-template>
     </ngx-charts-line-chart>
 
-    <ngx-charts-line-chart [scheme]="'fire'" [view]="view" [results]="dataHum" [gradient]="false" [xAxis]="true"
-        [yAxis]="true" [legend]="false" [showXAxisLabel]="false" [showYAxisLabel]="true" [yAxisLabel]="'Humidité'"
-        [autoScale]="true">
+    <ngx-charts-line-chart 
+        [scheme]="'fire'" 
+        [view]="view" 
+        [results]="dataHum" 
+        [gradient]="false" 
+        [xAxis]="true"
+        [yAxis]="true" 
+        [legend]="false" 
+        [showXAxisLabel]="false" 
+        [showYAxisLabel]="true" 
+        [yAxisLabel]="'Humidité'"
+        [autoScale]="true"
+        [xAxisTickFormatting]="formatXAxis">
+
+        <ng-template #seriesTooltipTemplate let-model="model">
+        <div class="custom-tooltip" style="padding: 5px 10px; background: #333; color: #fff; border-radius: 4px;">
+            <p style="margin: 0; font-weight: bold;">{{ model[0].name | date: 'dd/MM/yyyy HH:mm:ss' }}</p>
+            
+            <span *ngFor="let item of model">
+                <span [style.color]="item.color">●</span> {{ item.series }}: <strong>{{ item.value | number:'1.2-2' }} %</strong>
+            </span>
+        </div>
+        </ng-template>
     </ngx-charts-line-chart>
 </div>
